@@ -18,13 +18,14 @@ namespace Work3
             UIApplication uiApp = commandData.Application;
             UIDocument uiDoc = uiApp.ActiveUIDocument;
             Document doc = uiDoc.Document;
-
-            // Получение выбранного элемента
-            Reference reference = uiDoc.Selection.PickObject(ObjectType.Element);
-            Element element = doc.GetElement(reference.ElementId);
+            FamilyManager fm = doc.FamilyManager;
+            FamilyInstance family = new FilteredElementCollector(doc).OfClass(typeof(FamilyInstance))
+                .OfCategory(BuiltInCategory.OST_MechanicalEquipment)
+                .Cast<FamilyInstance>()
+                .First(it => it.Name == "ВЕЗА_Клеммное оборудование");
 
             // Получение параметра семейства
-            Parameter parameter = element.LookupParameter("Видимость_КК"); // Замените "Имя параметра" на фактическое имя параметра
+            FamilyParameter parameter = fm.get_Parameter("Видимость_КК"); // Замените "Имя параметра" на фактическое имя параметра
 
             if (parameter != null && parameter.IsReadOnly == false && parameter.StorageType == StorageType.Integer)
             {
@@ -32,12 +33,13 @@ namespace Work3
                 {
                     transaction.Start();
 
+
                     // Получение текущего значения параметра
-                    int value = parameter.AsInteger();
+                    bool value = family.LookupParameter("Видимые")?.AsInteger() == 1;
 
                     // Установка противоположного значения параметра
-                    int oppositeValue = (value == 0) ? 1 : 0;
-                    parameter.Set(oppositeValue);
+                    int oppositeValue = !value ? 1 : 0;
+                    fm.Set(parameter, oppositeValue);
 
                     transaction.Commit();
                 }

@@ -18,51 +18,41 @@ namespace Work3
             UIApplication uiApp = commandData.Application;
             UIDocument uiDoc = uiApp.ActiveUIDocument;
             Document doc = uiDoc.Document;
+            FamilyManager fm = doc.FamilyManager;
 
             try
             {
-                // Выбор семейства мышкой
-                Reference pickedRef = uiDoc.Selection.PickObject(ObjectType.Element, "Выберите семейство");
-                Element pickedElement = doc.GetElement(pickedRef.ElementId);
+                FamilyParameter heightParameter = fm.get_Parameter("ADSK_Размер_Высота");
+                FamilyParameter widthParameter = fm.get_Parameter("ADSK_Размер_Ширина");
 
-                // Получение значения параметров и изменение их значений
-                if (pickedElement != null && pickedElement is FamilyInstance familyInstance)
+                if (widthParameter != null || widthParameter != null)
                 {
-                    Parameter heightParameter = familyInstance.LookupParameter("ADSK_Размер_Высота");
-                    Parameter widthParameter = familyInstance.LookupParameter("ADSK_Размер_Ширина");
-                    if (widthParameter != null || widthParameter != null)
+                    using (InputForm inputForm = new InputForm())
                     {
-                        // Получение текущего значения параметров
-                        //string widthValue = widthParameter.AsValueString();
-                        //TaskDialog.Show("Значение параметра", $"Текущее значение ASDK_Ширина: {widthValue}");
-
-                        using (InputForm inputForm = new InputForm())
+                        if (inputForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                         {
-                            if (inputForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                            // Изменение значения параметров
+                            using (Transaction trans = new Transaction(doc, "Изменение параметра"))
                             {
-                                // Изменение значения параметров
-                                using (Transaction trans = new Transaction(doc, "Изменение параметра"))
+                                if (trans.Start() == TransactionStatus.Started)
                                 {
-                                    if (trans.Start() == TransactionStatus.Started)
-                                    {
-                                        heightParameter.Set(inputForm.intHeight / 304.8);
-                                        widthParameter.Set(inputForm.intWidth / 304.8); // Преобразование мм в футы (1 фут = 304.8 мм)
-                                        trans.Commit();
-                                    }
+                                    // Преобразование мм в футы (1 фут = 304.8 мм)
+                                    fm.Set(heightParameter, inputForm.intHeight / 304.8);
+                                    fm.Set(widthParameter, inputForm.intWidth / 304.8);
+                                    trans.Commit();
                                 }
-
-                                TaskDialog td = new TaskDialog("Успех! Новые значения -");
-                                td.MainContent = $"ASDK_Размер_Высота: {inputForm.intHeight} мм\nASDK_Размер_Ширина: {inputForm.intWidth} мм";
-                                TaskDialogResult result = td.Show();
                             }
+
+                            TaskDialog td = new TaskDialog("Успех! Новые значения -");
+                            td.MainContent = $"ASDK_Размер_Высота: {inputForm.intHeight} мм\nASDK_Размер_Ширина: {inputForm.intWidth} мм";
+                            TaskDialogResult result = td.Show();
                         }
                     }
-                    else 
-                        TaskDialog.Show("Ошибка", "Семейство не содержит таких параметров");    
                 }
-                else 
-                    TaskDialog.Show("Ошибка", "Не удалось выбрать семейство");
-                
+                else
+                    TaskDialog.Show("Ошибка", "Семейство не содержит таких параметров");
+
+
                 return Result.Succeeded;
             }
             catch (Exception ex)
@@ -71,5 +61,60 @@ namespace Work3
                 return Result.Failed;
             }
         }
+
+        //public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        //{
+        //    UIApplication uiApp = commandData.Application;
+        //    UIDocument uiDoc = uiApp.ActiveUIDocument;
+        //    Document doc = uiDoc.Document;
+
+        //    try
+        //    {
+        //        // Выбор семейства мышкой
+        //        Reference pickedRef = uiDoc.Selection.PickObject(ObjectType.Element, "Выберите семейство");
+        //        Element pickedElement = doc.GetElement(pickedRef.ElementId);
+
+        //        // Получение значения параметров и изменение их значений
+        //        if (pickedElement != null && pickedElement is FamilyInstance familyInstance)
+        //        {
+        //            Parameter heightParameter = familyInstance.LookupParameter("ADSK_Размер_Высота");
+        //            Parameter widthParameter = familyInstance.LookupParameter("ADSK_Размер_Ширина");
+        //            if (widthParameter != null || widthParameter != null)
+        //            {
+        //                using (InputForm inputForm = new InputForm())
+        //                {
+        //                    if (inputForm.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        //                    {
+        //                        // Изменение значения параметров
+        //                        using (Transaction trans = new Transaction(doc, "Изменение параметра"))
+        //                        {
+        //                            if (trans.Start() == TransactionStatus.Started)
+        //                            {
+        //                                heightParameter.Set(inputForm.intHeight / 304.8);
+        //                                widthParameter.Set(inputForm.intWidth / 304.8); // Преобразование мм в футы (1 фут = 304.8 мм)
+        //                                trans.Commit();
+        //                            }
+        //                        }
+
+        //                        TaskDialog td = new TaskDialog("Успех! Новые значения -");
+        //                        td.MainContent = $"ASDK_Размер_Высота: {inputForm.intHeight} мм\nASDK_Размер_Ширина: {inputForm.intWidth} мм";
+        //                        TaskDialogResult result = td.Show();
+        //                    }
+        //                }
+        //            }
+        //            else 
+        //                TaskDialog.Show("Ошибка", "Семейство не содержит таких параметров");    
+        //        }
+        //        else 
+        //            TaskDialog.Show("Ошибка", "Не удалось выбрать семейство");
+
+        //        return Result.Succeeded;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        message = ex.Message;
+        //        return Result.Failed;
+        //    }
+        //}
     }
 }
