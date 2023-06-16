@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Work3
@@ -13,20 +6,26 @@ namespace Work3
 
     public partial class InputForm : System.Windows.Forms.Form
     {
-        public int intHeight { get; private set; }
-        public int intWidth { get; private set; }
+        public double doubleHeight { get; set; }
+        public double doubleWidth { get; set; }
 
-        public InputForm()
+        public InputForm(double DoubleHeight, double DoubleWidth)
         {
             InitializeComponent();
+
+            doubleHeight = DoubleHeight;
+            doubleWidth = DoubleWidth;
+
+            txtHeight.Text = doubleHeight.ToString();
+            txtWidth.Text = doubleWidth.ToString();
         }
 
         private void okButton_Click(object sender, EventArgs e)
         {
-            if (int.TryParse(txtHeight.Text, out int height) && int.TryParse(txtWidth.Text, out int width))
+            if (double.TryParse(txtHeight.Text, out double height) && double.TryParse(txtWidth.Text, out double width))
             {
-                intHeight = height;
-                intWidth = width;
+                doubleHeight = height;
+                doubleWidth = width;
                 DialogResult = DialogResult.OK;
                 Close();
             }
@@ -34,12 +33,6 @@ namespace Work3
             {
                 MessageBox.Show("Пожалуйста, введите корректные числовые значения.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }            
-        }
-
-        private void cancelButton_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
         }
     }
 }

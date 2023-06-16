@@ -1,12 +1,7 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
-using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.UI;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Autodesk.Revit.DB.Electrical;
 
 namespace Work3
@@ -25,33 +20,8 @@ namespace Work3
                 .Cast<FamilyInstance>()
                 .First(it => it.Name == "ВЕЗА_Клеммное оборудование");
 
-            var opt = new Autodesk.Revit.DB.Options
-            {
-                ComputeReferences = true,
-                IncludeNonVisibleObjects = true,
-                View = doc.ActiveView,
-            };
-            GeometryElement geoElement = family.get_Geometry(opt);
-            GeometryInstance geoInstance = geoElement.First(it => it is GeometryInstance) as GeometryInstance;
-            GeometryElement geoSymbol = geoInstance.GetSymbolGeometry() as GeometryElement;
-
-            Solid geoSolid = geoSymbol.First(it => it is Solid) as Solid;
-
-            int i = 1;
-            foreach (var s in geoSymbol)
-            {
-                if (s is Solid)
-                {
-                    if (i == 13)
-                    {
-                        geoSolid = s as Solid;
-                        break;
-                    }
-                    else { i++; }
-                }
-            }
-
-            Face geoFace = geoSolid.Faces.get_Item(0);
+            Solid solid = GetSolid.Selected(doc, family, 13);
+            Face geoFace = solid.Faces.get_Item(0);
             Reference geoRef = geoFace.Reference;
 
             // Получение параметра семейства

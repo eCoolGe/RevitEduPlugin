@@ -31,6 +31,7 @@ namespace Work3
             #region 2. Коннекторы и дополнительные элементы
             {
                 RibbonPanel panel = application.CreateRibbonPanel(tabName, "Коннекторы и дополнительные элементы");
+
                 panel.AddItem(new PushButtonData(nameof(ToggleButtonCommandKK), "КК", assemblyLocation, typeof(ToggleButtonCommandKK).FullName)
                 {
                     LargeImage = new BitmapImage(new Uri(iconsDirectoryPath + "red.png"))
