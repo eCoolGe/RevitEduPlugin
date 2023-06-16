@@ -17,40 +17,34 @@ namespace Work3
 
             application.CreateRibbonTab(tabName);
 
-            #region 1. Мой первый плагин
+            #region 1. Основное семейство
             {
-                RibbonPanel panel = application.CreateRibbonPanel(tabName, "Первый плагин");
+                RibbonPanel panel = application.CreateRibbonPanel(tabName, "Основное семейство");
 
-                panel.AddItem(new PushButtonData(nameof(Class1), "Приветствие", assemblyLocation, typeof(Class1).FullName)
+                panel.AddItem(new PushButtonData(nameof(ModifyFamilyParameters), "Размер рамки", assemblyLocation, typeof(ModifyFamilyParameters).FullName)
                 {
                     LargeImage = new BitmapImage(new Uri(iconsDirectoryPath + "green.png"))
                 });
             }
             #endregion
 
-            #region 2. Кнопка изменения размеров и две другие кнопки
+            #region 2. Коннекторы и дополнительные элементы
             {
-                RibbonPanel panel = application.CreateRibbonPanel(tabName, "Изменить семейство");
-                panel.AddItem(new PushButtonData(nameof(ModifyFamilyParameters), "Изменить размер", assemblyLocation, typeof(ModifyFamilyParameters).FullName)
-                {
-                    LargeImage = new BitmapImage(new Uri(iconsDirectoryPath + "red.png"))
-                });
+                RibbonPanel panel = application.CreateRibbonPanel(tabName, "Коннекторы и дополнительные элементы");
                 panel.AddItem(new PushButtonData(nameof(ToggleButtonCommandKK), "КК", assemblyLocation, typeof(ToggleButtonCommandKK).FullName)
                 {
-                    LargeImage = new BitmapImage(new Uri(iconsDirectoryPath + "blue.png"))
+                    LargeImage = new BitmapImage(new Uri(iconsDirectoryPath + "red.png"))
                 });
                 panel.AddItem(new PushButtonData(nameof(ToggleButtonCommandDrive), "Привод", assemblyLocation, typeof(ToggleButtonCommandDrive).FullName)
                 {
                     LargeImage = new BitmapImage(new Uri(iconsDirectoryPath + "orange.png"))
                 });
-
-                //panel.AddItem(new PushButtonData(nameof(AddRemoveConnectorsCommand), "Изменить размер", assemblyLocation, typeof(AddRemoveConnectorsCommand).FullName)
-                //{
-                //    LargeImage = new BitmapImage(new Uri(iconsDirectoryPath + "red.png"))
-                //});
+                panel.AddItem(new PushButtonData(nameof(ModifyDuctConnectors), "Коннекторы воздуховода", assemblyLocation, typeof(ModifyDuctConnectors).FullName)
+                {
+                    LargeImage = new BitmapImage(new Uri(iconsDirectoryPath + "blue.png"))
+                });
             }
             #endregion
-
 
             return Result.Succeeded;
         }
