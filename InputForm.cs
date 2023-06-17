@@ -32,7 +32,7 @@ namespace Work3
             else
             {
                 MessageBox.Show("Пожалуйста, введите корректные числовые значения.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }            
+            }
         }
     }
 }

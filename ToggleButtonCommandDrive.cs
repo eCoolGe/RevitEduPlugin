@@ -1,8 +1,8 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Electrical;
 using Autodesk.Revit.UI;
 using System.Linq;
-using Autodesk.Revit.DB.Electrical;
 
 namespace Work3
 {
@@ -54,7 +54,6 @@ namespace Work3
                                             .First(it => it.LookupParameter("Напряжение")?.AsDouble() == 40);
                         doc.Delete(elConnector.Id);
                     }
-
 
                     fm.Set(parameter, oppositeValue);
 

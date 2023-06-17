@@ -1,10 +1,10 @@
-﻿using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.Attributes;
+using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Mechanical;
 using Autodesk.Revit.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autodesk.Revit.Attributes;
-using Autodesk.Revit.DB.Mechanical;
-using System;
 
 namespace Work3
 {
@@ -47,12 +47,13 @@ namespace Work3
                         ConnectorElement ductConnector1 = ConnectorElement.CreateDuctConnector(doc, DuctSystemType.Global, ConnectorProfileType.Rectangular, geoRef1);
                         ConnectorElement ductConnector2 = ConnectorElement.CreateDuctConnector(doc, DuctSystemType.Global, ConnectorProfileType.Rectangular, geoRef2);
 
+                        // Изменение ширины и высоты коннекторов
                         ductConnector1.LookupParameter("Высота")?.Set(familyHeight);
                         ductConnector1.LookupParameter("Ширина")?.Set(familyWidth);
-
                         ductConnector2.LookupParameter("Высота")?.Set(familyHeight);
                         ductConnector2.LookupParameter("Ширина")?.Set(familyWidth);
 
+                        // Соединение коннекторов
                         ductConnector1.SetLinkedConnectorElement(ductConnector2);
                     }
                     else
@@ -62,7 +63,6 @@ namespace Work3
                             doc.Delete(connector.Id);
                         }
                     }
-
 
                     transaction.Commit();
                 }

@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
-    <Compile Include="SelectSolid.cs" />
+    <Compile Include="GetSolid.cs" />
     <Compile Include="ModifyDuctConnectors.cs" />
     <Compile Include="InputForm.cs">
       <SubType>Form</SubType>

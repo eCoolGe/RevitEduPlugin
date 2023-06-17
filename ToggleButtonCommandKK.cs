@@ -1,8 +1,8 @@
 ﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
+using Autodesk.Revit.DB.Electrical;
 using Autodesk.Revit.UI;
 using System.Linq;
-using Autodesk.Revit.DB.Electrical;
 
 namespace Work3
 {
@@ -25,7 +25,7 @@ namespace Work3
             Reference geoRef = geoFace.Reference;
 
             // Получение параметра семейства
-            FamilyParameter parameter = fm.get_Parameter("Видимость_КК"); // Замените "Имя параметра" на фактическое имя параметра
+            FamilyParameter parameter = fm.get_Parameter("Видимость_КК");
 
             if (parameter != null && parameter.IsReadOnly == false && parameter.StorageType == StorageType.Integer)
             {
@@ -54,7 +54,6 @@ namespace Work3
                                             .First(it => it.LookupParameter("Напряжение")?.AsDouble() == 20);
                         doc.Delete(elConnector.Id);
                     }
-                        
 
                     fm.Set(parameter, oppositeValue);
 
